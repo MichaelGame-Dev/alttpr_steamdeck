@@ -27,14 +27,8 @@ all from a Steam shortcut.
 - **New Seed**: generates a fresh seed and starts it. If generation fails (offline, API down), it loads your previous seed.
 - **Continue**: starts the most recent seed. Use this to resume a run; launching *New Seed* starts a different game.
   Settings are baked into the seed, so Continue never needs a preset.
-- **Spoiler**: sends the latest seed's alttpr.com page, which has its spoiler, to your phone via
-  [KDE Connect](https://kdeconnect.kde.org/). If no phone is reachable, it shows the link instead.
-  A full-screen QR-code version lives on the `qr-spoiler` branch.
-
-### KDE Connect setup (once)
-1. Install the KDE Connect app on your phone (Android: Play Store/F-Droid; iPhone: App Store).
-2. On the HTPC in Desktop Mode, open **KDE Connect** from the app menu, find your phone (same Wi-Fi) and pair it.
-3. Check it from a terminal with `kdeconnect-cli --list-available`. Your phone should be listed.
+- **Spoiler**: shows a full-screen QR code for the latest seed's alttpr.com page (`https://alttpr.com/en/h/<seed>`).
+  Scan it with your phone to see the spoiler. Any button closes it, and it closes itself after 5 minutes.
 
 ### Picking a preset per launch
 In Steam, right-click **New Seed** → Properties → **Launch Options**, and enter a preset name, e.g. `-open`.

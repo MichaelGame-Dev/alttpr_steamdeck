@@ -2,13 +2,14 @@
 # ALttPR launcher.
 #   alttpr.sh new [preset]  generate a fresh seed (default preset from config, or e.g. -open), then play it
 #   alttpr.sh continue      play the most recently generated seed (settings are baked into it; extra args ignored)
-#   alttpr.sh spoiler       send the latest seed's alttpr.com page (with its spoiler) to your phone via KDE Connect
+#   alttpr.sh spoiler       show a QR code for the latest seed's alttpr.com page (with its spoiler)
 set -uo pipefail
 
 REPO_DIR="$(cd "$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")" && pwd)"
 DATA_DIR="$HOME/.local/share/alttpr-launcher"
 CONFIG="$HOME/.config/alttpr-launcher/config.env"
 LOG="$DATA_DIR/launcher.log"
+export PYGAME_HIDE_SUPPORT_PROMPT=1
 
 mkdir -p "$DATA_DIR"
 exec >>"$LOG" 2>&1
@@ -76,26 +77,9 @@ case "${1:-continue}" in
     [[ -n "$prev" ]] || die "No seed generated yet. Use 'New Seed' first."
     meta="${prev%.sfc}.json"
     [[ -f "$meta" ]] || die "Seed info not found: $meta"
-    hash="$("$DATA_DIR/venv/bin/python" -c 'import json,sys; print(json.load(open(sys.argv[1]))["hash"])' "$meta")"
-    url="https://alttpr.com/en/h/$hash"
-    command -v kdeconnect-cli >/dev/null || die "KDE Connect isn't installed. Spoiler link:\n$url"
-    # In Game Mode the KDE Connect daemon may have just been started on demand; give the phone time to reconnect.
-    devices=""
-    for _ in 1 2 3 4 5 6; do
-      devices="$(kdeconnect-cli --list-available --id-only 2>/dev/null)"
-      [[ -n "$devices" ]] && break
-      kdeconnect-cli --refresh >/dev/null 2>&1
-      sleep 2
-    done
-    [[ -n "$devices" ]] || die "No paired phone reachable via KDE Connect (is the app open and on the same Wi-Fi?).\n\nSpoiler link:\n$url"
-    for dev in $devices; do
-      echo "Sharing $url to KDE Connect device $dev"
-      kdeconnect-cli --device "$dev" --share "$url" || die "Sending to KDE Connect device $dev failed.\n\nSpoiler link:\n$url"
-    done
-    if command -v zenity >/dev/null; then
-      zenity --info --title="ALttP Randomizer" --timeout=5 --width=400 --text="Spoiler link sent to your phone."
-    fi
-    exit 0
+    "$DATA_DIR/venv/bin/python" -c 'import pygame, segno' 2>/dev/null \
+      || die "The QR screen's Python packages are missing. Re-run install.sh."
+    exec "$DATA_DIR/venv/bin/python" "$REPO_DIR/show_spoiler.py" "$meta"
     ;;
   *)
     die "Usage: alttpr.sh new [preset]|continue|spoiler"

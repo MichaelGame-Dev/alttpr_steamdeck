@@ -45,7 +45,13 @@ if [[ ! -x "$DATA_DIR/venv/bin/python" ]]; then
   python3 -m venv "$DATA_DIR/venv"
 fi
 "$DATA_DIR/venv/bin/pip" install --quiet --upgrade pyz3r
-echo "Python packages installed in $DATA_DIR/venv"
+echo "pyz3r installed in $DATA_DIR/venv"
+# Only the Spoiler QR screen needs these; don't let a failure here block seed generation.
+if "$DATA_DIR/venv/bin/pip" install --quiet --upgrade segno pygame-ce; then
+  echo "QR screen packages installed"
+else
+  echo "WARNING: couldn't install segno/pygame-ce; New Seed and Continue still work, Spoiler won't."
+fi
 
 # --- Emulator check ---
 emu="${RETROARCH_CMD[0]}"
