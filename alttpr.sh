@@ -76,7 +76,8 @@ case "${1:-continue}" in
     [[ -n "$prev" ]] || die "No seed generated yet. Use 'New Seed' first."
     meta="${prev%.sfc}.json"
     [[ -f "$meta" ]] || die "Seed info not found: $meta"
-    url="$("$DATA_DIR/venv/bin/python" -c 'import json,sys; print(json.load(open(sys.argv[1]))["url"])' "$meta")"
+    hash="$("$DATA_DIR/venv/bin/python" -c 'import json,sys; print(json.load(open(sys.argv[1]))["hash"])' "$meta")"
+    url="https://alttpr.com/en/h/$hash"
     command -v kdeconnect-cli >/dev/null || die "KDE Connect isn't installed. Spoiler link:\n$url"
     # In Game Mode the KDE Connect daemon may have just been started on demand; give the phone time to reconnect.
     devices=""

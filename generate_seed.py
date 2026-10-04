@@ -39,7 +39,8 @@ async def generate(rom: Path, preset: Path, out_dir: Path) -> Path:
 
     meta = {
         "hash": seed.hash,
-        "url": seed.url,
+        # Seed permalink pages (with the spoiler, when enabled) live under /<lang>/h/; pyz3r's seed.url omits the language.
+        "url": f"https://alttpr.com/en/h/{seed.hash}",
         "code": seed.code,
         "preset": preset.name,
         "settings": settings,
