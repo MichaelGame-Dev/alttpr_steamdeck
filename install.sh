@@ -44,7 +44,7 @@ echo "Base ROM OK: $BASE_ROM"
 if [[ ! -x "$DATA_DIR/venv/bin/python" ]]; then
   python3 -m venv "$DATA_DIR/venv"
 fi
-"$DATA_DIR/venv/bin/pip" install --quiet --upgrade pyz3r segno pygame-ce
+"$DATA_DIR/venv/bin/pip" install --quiet --upgrade pyz3r
 echo "Python packages installed in $DATA_DIR/venv"
 
 # --- Emulator check ---

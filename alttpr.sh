@@ -2,7 +2,7 @@
 # ALttPR launcher.
 #   alttpr.sh new [preset]  generate a fresh seed (default preset from config, or e.g. -open), then play it
 #   alttpr.sh continue      play the most recently generated seed (settings are baked into it; extra args ignored)
-#   alttpr.sh spoiler       show a QR code linking to the latest seed's alttpr.com page (and its spoiler)
+#   alttpr.sh spoiler       send the latest seed's alttpr.com page (with its spoiler) to your phone via KDE Connect
 set -uo pipefail
 
 REPO_DIR="$(cd "$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")" && pwd)"
@@ -15,7 +15,7 @@ exec >>"$LOG" 2>&1
 echo "=== $(date '+%F %T') alttpr.sh $*"
 
 die() {
-  echo "ERROR: $*"
+  printf 'ERROR: %b\n' "$*"
   command -v zenity >/dev/null && zenity --error --title="ALttP Randomizer" --text="$*\n\nLog: $LOG" --width=400
   exit 1
 }
@@ -76,15 +76,25 @@ case "${1:-continue}" in
     [[ -n "$prev" ]] || die "No seed generated yet. Use 'New Seed' first."
     meta="${prev%.sfc}.json"
     [[ -f "$meta" ]] || die "Seed info not found: $meta"
-    # Also push the link to any phone paired via KDE Connect, if available.
-    if command -v kdeconnect-cli >/dev/null; then
-      url="$("$DATA_DIR/venv/bin/python" -c 'import json,sys; print(json.load(open(sys.argv[1]))["url"])' "$meta")"
-      for dev in $(kdeconnect-cli --list-available --id-only 2>/dev/null); do
-        echo "Sharing $url to KDE Connect device $dev"
-        kdeconnect-cli --device "$dev" --share "$url" || true
-      done
+    url="$("$DATA_DIR/venv/bin/python" -c 'import json,sys; print(json.load(open(sys.argv[1]))["url"])' "$meta")"
+    command -v kdeconnect-cli >/dev/null || die "KDE Connect isn't installed. Spoiler link:\n$url"
+    # In Game Mode the KDE Connect daemon may have just been started on demand; give the phone time to reconnect.
+    devices=""
+    for _ in 1 2 3 4 5 6; do
+      devices="$(kdeconnect-cli --list-available --id-only 2>/dev/null)"
+      [[ -n "$devices" ]] && break
+      kdeconnect-cli --refresh >/dev/null 2>&1
+      sleep 2
+    done
+    [[ -n "$devices" ]] || die "No paired phone reachable via KDE Connect (is the app open and on the same Wi-Fi?).\n\nSpoiler link:\n$url"
+    for dev in $devices; do
+      echo "Sharing $url to KDE Connect device $dev"
+      kdeconnect-cli --device "$dev" --share "$url" || die "Sending to KDE Connect device $dev failed.\n\nSpoiler link:\n$url"
+    done
+    if command -v zenity >/dev/null; then
+      zenity --info --title="ALttP Randomizer" --timeout=5 --width=400 --text="Spoiler link sent to your phone."
     fi
-    exec "$DATA_DIR/venv/bin/python" "$REPO_DIR/show_spoiler.py" "$meta"
+    exit 0
     ;;
   *)
     die "Usage: alttpr.sh new [preset]|continue|spoiler"
