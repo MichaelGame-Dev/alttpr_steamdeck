@@ -47,6 +47,19 @@ they're similar.
 
 To update later, run =git pull= and then =./install.sh= again. Your seeds and saves aren't affected.
 
+** Artwork (optional)
+Non-Steam entries start with blank artwork. The easiest way to add some is the
+[[https://github.com/SteamGridDB/decky-steamgriddb][SteamGridDB plugin]] for [[https://decky.xyz][Decky Loader]], which
+works from Game Mode with a controller:
+1. Install Decky Loader. On Bazzite, run =ujust setup-decky install= in a terminal; on a Steam Deck, follow
+   the instructions at [[https://decky.xyz]].
+2. In Game Mode, open the Quick Access menu (=…=) → Decky → store icon → install *SteamGridDB*.
+3. Open an ALttP Randomizer entry's page, press the Options (☰) button → *Change artwork…*.
+4. Search for "A Link to the Past" rather than the entry's name, and pick a grid, hero, logo and icon.
+   Repeat for each entry.
+
+No artwork is included in this repo because the game's art belongs to Nintendo.
+
 * Usage
 - *New Seed*: generates a new seed and starts it. If generation fails (offline, alttpr.com down), it loads
   your previous seed instead.
