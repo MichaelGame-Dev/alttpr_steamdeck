@@ -1,0 +1,34 @@
+{
+  "_comment": "Mirrors the 'beginner' preset on alttpr.com (https://alttpr.com/randomizer/settings).",
+  "settings": {
+    "glitches": "none",
+    "item_placement": "basic",
+    "dungeon_items": "standard",
+    "accessibility": "locations",
+    "goal": "ganon",
+    "crystals": { "ganon": "7", "tower": "7" },
+    "mode": "standard",
+    "entrances": "none",
+    "hints": "off",
+    "weapons": "assured",
+    "item": { "pool": "normal", "functionality": "normal" },
+    "tournament": false,
+    "spoilers": "on",
+    "lang": "en",
+    "allow_quickswap": true,
+    "pseudoboots": false,
+    "enemizer": {
+      "boss_shuffle": "none",
+      "enemy_shuffle": "none",
+      "enemy_damage": "default",
+      "enemy_health": "default",
+      "pot_shuffle": "off"
+    }
+  },
+  "cosmetics": {
+    "heartspeed": "half",
+    "heartcolor": "red",
+    "spritename": "Link",
+    "music": true
+  }
+}
