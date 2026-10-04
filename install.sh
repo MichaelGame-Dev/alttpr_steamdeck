@@ -44,8 +44,8 @@ echo "Base ROM OK: $BASE_ROM"
 if [[ ! -x "$DATA_DIR/venv/bin/python" ]]; then
   python3 -m venv "$DATA_DIR/venv"
 fi
-"$DATA_DIR/venv/bin/pip" install --quiet --upgrade pyz3r
-echo "pyz3r installed in $DATA_DIR/venv"
+"$DATA_DIR/venv/bin/pip" install --quiet --upgrade pyz3r segno pygame-ce
+echo "Python packages installed in $DATA_DIR/venv"
 
 # --- Emulator check ---
 emu="${RETROARCH_CMD[0]}"
@@ -76,7 +76,8 @@ EOF
 }
 write_desktop alttpr-new "ALttP Randomizer - New Seed" new
 write_desktop alttpr-continue "ALttP Randomizer - Continue" continue
+write_desktop alttpr-spoiler "ALttP Randomizer - Spoiler" spoiler
 
 echo
 echo "Done. In Desktop Mode: Steam > Games > Add a Non-Steam Game to My Library,"
-echo "tick both 'ALttP Randomizer' entries, then play from Game Mode."
+echo "tick the 'ALttP Randomizer' entries, then play from Game Mode."

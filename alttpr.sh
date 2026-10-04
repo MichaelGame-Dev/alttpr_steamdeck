@@ -2,6 +2,7 @@
 # ALttPR launcher.
 #   alttpr.sh new [preset]  generate a fresh seed (default preset from config, or e.g. -open), then play it
 #   alttpr.sh continue      play the most recently generated seed (settings are baked into it; extra args ignored)
+#   alttpr.sh spoiler       show a QR code linking to the latest seed's alttpr.com page (and its spoiler)
 set -uo pipefail
 
 REPO_DIR="$(cd "$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")" && pwd)"
@@ -70,7 +71,22 @@ case "${1:-continue}" in
     [[ -n "$prev" ]] || die "No seed generated yet. Use 'New Seed' first."
     launch "$prev"
     ;;
+  spoiler)
+    prev="$(latest_rom)"
+    [[ -n "$prev" ]] || die "No seed generated yet. Use 'New Seed' first."
+    meta="${prev%.sfc}.json"
+    [[ -f "$meta" ]] || die "Seed info not found: $meta"
+    # Also push the link to any phone paired via KDE Connect, if available.
+    if command -v kdeconnect-cli >/dev/null; then
+      url="$("$DATA_DIR/venv/bin/python" -c 'import json,sys; print(json.load(open(sys.argv[1]))["url"])' "$meta")"
+      for dev in $(kdeconnect-cli --list-available --id-only 2>/dev/null); do
+        echo "Sharing $url to KDE Connect device $dev"
+        kdeconnect-cli --device "$dev" --share "$url" || true
+      done
+    fi
+    exec "$DATA_DIR/venv/bin/python" "$REPO_DIR/show_spoiler.py" "$meta"
+    ;;
   *)
-    die "Usage: alttpr.sh new [preset]|continue"
+    die "Usage: alttpr.sh new [preset]|continue|spoiler"
     ;;
 esac

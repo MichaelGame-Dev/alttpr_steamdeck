@@ -20,13 +20,16 @@ all from a Steam shortcut.
    ```
    If it warns that the core is missing, open RetroArch → Online Updater → Core Downloader → *Nintendo - SNES / SFC (Snes9x - Current)*.
 3. Steam → Games → **Add a Non-Steam Game to My Library…** → tick
-   **ALttP Randomizer - New Seed** and **ALttP Randomizer - Continue** → Add.
+   **ALttP Randomizer - New Seed**, **- Continue** and **- Spoiler** → Add.
 4. Switch to Game Mode and play.
 
 ## Usage
 - **New Seed**: generates a fresh seed and starts it. If generation fails (offline, API down), it loads your previous seed.
 - **Continue**: starts the most recent seed. Use this to resume a run; launching *New Seed* starts a different game.
   Settings are baked into the seed, so Continue never needs a preset.
+- **Spoiler**: shows a full-screen QR code for the latest seed's alttpr.com page. Scan it with your phone to see
+  the spoiler. Any button closes it, and it closes itself after 5 minutes. If your phone is paired with
+  [KDE Connect](https://kdeconnect.kde.org/), the link is also sent straight to the phone.
 
 ### Picking a preset per launch
 In Steam, right-click **New Seed** → Properties → **Launch Options**, and enter a preset name, e.g. `-open`.
