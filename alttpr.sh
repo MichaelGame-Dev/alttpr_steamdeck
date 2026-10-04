@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # ALttPR launcher.
-#   alttpr.sh new       generate a fresh seed, then play it
-#   alttpr.sh continue  play the most recently generated seed
+#   alttpr.sh new [preset]  generate a fresh seed (default preset from config, or e.g. -open), then play it
+#   alttpr.sh continue      play the most recently generated seed (settings are baked into it; extra args ignored)
 set -uo pipefail
 
 REPO_DIR="$(cd "$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")" && pwd)"
@@ -30,7 +30,6 @@ if [[ -z "${SEED_DIR:-}" ]]; then
     SEED_DIR="$DATA_DIR/seeds"
   fi
 fi
-[[ "$PRESET" = /* ]] || PRESET="$REPO_DIR/$PRESET"
 LATEST="$SEED_DIR/latest.txt"
 
 latest_rom() {
@@ -47,6 +46,13 @@ launch() {
 case "${1:-continue}" in
   new)
     [[ -f "$BASE_ROM" ]] || die "Base ROM not found: $BASE_ROM. Run install.sh."
+    # Optional preset name overrides the config, e.g. "open", "-open" or "--open" -> presets/open.json.
+    if [[ -n "${2:-}" ]]; then
+      name="${2#"${2%%[!-]*}"}"
+      PRESET="presets/${name%.json}.json"
+      [[ -f "$REPO_DIR/$PRESET" ]] || die "Unknown preset '$2'. Available: $(cd "$REPO_DIR/presets" && ls *.json | sed 's/\.json$//' | tr '\n' ' ')"
+    fi
+    [[ "$PRESET" = /* ]] || PRESET="$REPO_DIR/$PRESET"
     echo "Generating seed with preset $PRESET"
     if rom="$("$DATA_DIR/venv/bin/python" "$REPO_DIR/generate_seed.py" \
         --rom "$BASE_ROM" --preset "$PRESET" --out-dir "$SEED_DIR")" && [[ -f "$rom" ]]; then
@@ -65,6 +71,6 @@ case "${1:-continue}" in
     launch "$prev"
     ;;
   *)
-    die "Usage: alttpr.sh new|continue"
+    die "Usage: alttpr.sh new [preset]|continue"
     ;;
 esac

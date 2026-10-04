@@ -26,6 +26,16 @@ all from a Steam shortcut.
 ## Usage
 - **New Seed**: generates a fresh seed and starts it. If generation fails (offline, API down), it loads your previous seed.
 - **Continue**: starts the most recent seed. Use this to resume a run; launching *New Seed* starts a different game.
+  Settings are baked into the seed, so Continue never needs a preset.
+
+### Picking a preset per launch
+In Steam, right-click **New Seed** → Properties → **Launch Options**, and enter a preset name, e.g. `-open`.
+It maps to `presets/open.json`; `open`, `-open` and `--open` all work. Leave it empty to use the config default.
+An unknown name shows an error listing the available presets.
+From a terminal: `./alttpr.sh new -open`.
+
+Tip: to have both one click away, add *New Seed* to Steam twice, rename one copy to
+"ALttP Randomizer - New Seed (Open)", and give that copy the `-open` launch option.
 
 Seeds are stored in `~/Emulation/roms/snes/alttpr/` (or `~/.local/share/alttpr-launcher/seeds/` without
 EmuDeck). Each seed comes with:
