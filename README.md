@@ -27,8 +27,10 @@ all from a Steam shortcut.
 - **New Seed**: generates a fresh seed and starts it. If generation fails (offline, API down), it loads your previous seed.
 - **Continue**: starts the most recent seed. Use this to resume a run; launching *New Seed* starts a different game.
   Settings are baked into the seed, so Continue never needs a preset.
-- **Spoiler**: shows a full-screen QR code for the latest seed's alttpr.com page (`https://alttpr.com/en/h/<seed>`).
-  Scan it with your phone to see the spoiler. Any button closes it, and it closes itself after 5 minutes.
+- **Spoiler**: browse the latest seed's spoiler on the TV with the controller. Areas are listed on the left, and
+  each one stays hidden until you press A on it, so scrolling doesn't spoil anything by accident.
+  *Route to beat the game* lists one item order that works.
+  D-pad/stick: move · A: reveal · L/R shoulder: page · B: back (B again quits) · Start: quit.
 
 ### Picking a preset per launch
 In Steam, right-click **New Seed** → Properties → **Launch Options**, and enter a preset name, e.g. `-open`.

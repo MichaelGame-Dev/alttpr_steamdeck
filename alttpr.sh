@@ -2,7 +2,7 @@
 # ALttPR launcher.
 #   alttpr.sh new [preset]  generate a fresh seed (default preset from config, or e.g. -open), then play it
 #   alttpr.sh continue      play the most recently generated seed (settings are baked into it; extra args ignored)
-#   alttpr.sh spoiler       show a QR code for the latest seed's alttpr.com page (with its spoiler)
+#   alttpr.sh spoiler       browse the latest seed's spoiler on the TV with the controller
 set -uo pipefail
 
 REPO_DIR="$(cd "$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")" && pwd)"
@@ -77,8 +77,8 @@ case "${1:-continue}" in
     [[ -n "$prev" ]] || die "No seed generated yet. Use 'New Seed' first."
     meta="${prev%.sfc}.json"
     [[ -f "$meta" ]] || die "Seed info not found: $meta"
-    "$DATA_DIR/venv/bin/python" -c 'import pygame, segno' 2>/dev/null \
-      || die "The QR screen's Python packages are missing. Re-run install.sh."
+    "$DATA_DIR/venv/bin/python" -c 'import pygame' 2>/dev/null \
+      || die "The spoiler viewer's Python package (pygame-ce) is missing. Re-run install.sh."
     exec "$DATA_DIR/venv/bin/python" "$REPO_DIR/show_spoiler.py" "$meta"
     ;;
   *)
