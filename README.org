@@ -1,5 +1,6 @@
 #+TITLE: ALttP Randomizer Launcher
-*NOTE on PRs:* I'm open to PRs for bugs or adding features. That being said, the point of this is to work on Bazzite, Steamdeck, etc. meaning there are limitations to what tools can be installed used. I also considered doing something like zelda3-randomizer. 
+*NOTE on PRs:* I'm open to PRs for bugs or adding features. That being said, the point of this is to work on Bazzite, Steamdeck, etc. meaning there are limitations to what tools can be installed used. I also considered doing something like zelda3-randomizer.
+
 This project makes it easy to start and resume
 [[https://alttpr.com][The Legend of Zelda: A Link to the Past Randomizer]] on a Steam Deck or a system like
 [[https://bazzite.gg][Bazzite]] or [[https://chimeraos.org][ChimeraOS]], without going to Desktop Mode. Setup happens
